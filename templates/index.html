@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Détection de Paludisme - CNN Flask</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a2e0f6e52c.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col justify-center items-center p-6">
+<div class="bg-white shadow-lg rounded-2xl p-8 max-w-lg w-full text-center">
+    <h1 class="text-3xl font-bold text-green-700 mb-2">🧬 Détection de Paludisme</h1>
+    <p class="text-gray-600 mb-6">Analysez une cellule pour déterminer si elle est infectée ou non.</p>
+
+    <!-- Zone de sélection de fichier -->
+    <div id="upload-area" class="border-2 border-dashed border-green-400 rounded-xl p-6 bg-green-50 cursor-pointer hover:bg-green-100 transition">
+        <p class="text-gray-700">Cliquez ici ou déposez une image (.jpg, .png)</p>
+        <input id="fileInput" type="file" accept="image/*" class="hidden" />
+    </div>
+
+    <!-- Aperçu image -->
+    <div id="preview" class="hidden mt-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">🖼️ Aperçu de l'image :</h3>
+        <img id="previewImage" src="#" alt="Prévisualisation" class="mx-auto rounded-lg shadow-md w-64 h-64 object-cover border" />
+    </div>
+
+    <!-- Bouton prédiction -->
+    <button id="predictBtn" class="mt-6 bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition hidden">
+        Prédire 🔍
+    </button>
+
+    <!-- Résultat -->
+    <div id="result" class="hidden mt-6 p-4 rounded-xl border-t-4">
+        <h2 id="predictionText" class="text-2xl font-bold"></h2>
+        <p id="confidenceText" class="mt-2 text-gray-700 font-medium"></p>
+        <p id="descText" class="mt-2 text-gray-600"></p>
+        <p id="recoText" class="mt-4 font-semibold"></p>
+    </div>
+
+    <!-- Barre de progression -->
+    <div id="loading" class="hidden mt-6">
+        <div class="flex justify-center items-center space-x-2">
+            <div class="w-4 h-4 bg-green-600 rounded-full animate-bounce"></div>
+            <div class="w-4 h-4 bg-green-600 rounded-full animate-bounce delay-150"></div>
+            <div class="w-4 h-4 bg-green-600 rounded-full animate-bounce delay-300"></div>
+        </div>
+        <p class="text-gray-600 mt-3">Analyse en cours...</p>
+    </div>
+</div>
+
+<footer class="mt-10 text-gray-500 text-sm">
+    &copy; 2025 - Système de Détection de Paludisme | Flask + TensorFlow + Tailwind
+</footer>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('upload-area');
+    const preview = document.getElementById('preview');
+    const previewImage = document.getElementById('previewImage');
+    const predictBtn = document.getElementById('predictBtn');
+    const resultDiv = document.getElementById('result');
+    const predictionText = document.getElementById('predictionText');
+    const confidenceText = document.getElementById('confidenceText');
+    const descText = document.getElementById('descText');
+    const recoText = document.getElementById('recoText');
+    const loading = document.getElementById('loading');
+
+    // Clique sur la zone d'upload
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    // Quand un fichier est choisi
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          previewImage.src = ev.target.result;
+          preview.classList.remove('hidden');
+          predictBtn.classList.remove('hidden');
+          resultDiv.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Envoi du fichier pour prédiction
+    predictBtn.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) return alert('Veuillez sélectionner une image.');
+
+      loading.classList.remove('hidden');
+      predictBtn.classList.add('hidden');
+      resultDiv.classList.add('hidden');
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/predict', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        loading.classList.add('hidden');
+
+        if (data.error) {
+          alert('Erreur : ' + data.error);
+          return;
+        }
+
+        const color = data.class_info.color;
+        predictionText.innerText = `Résultat : ${data.predicted_class}`;
+        confidenceText.innerText = `Confiance : ${data.confidence_percentage}`;
+        descText.innerText = data.class_info.description;
+        recoText.innerText = data.class_info.recommendation;
+
+        resultDiv.style.borderColor = color;
+        predictionText.style.color = color;
+        recoText.style.color = color;
+
+        resultDiv.classList.remove('hidden');
+      } catch (error) {
+        loading.classList.add('hidden');
+        alert('Erreur de communication avec le serveur.');
+        console.error(error);
+      }
+    });
+</script>
+</body>
+</html>

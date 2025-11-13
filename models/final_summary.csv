@@ -1,0 +1,11 @@
+Metric,Value
+Total Images,27558
+Train Size,19910
+Val Size,3514
+Test Size,4134
+Best Model,model_C
+Test Accuracy,0.9579
+Sensitivity,0.9739
+Specificity,0.9419
+Precision,0.9437
+F1-Score,0.9586
