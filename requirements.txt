@@ -8,4 +8,5 @@ sqlalchemy
 psycopg2-binary
 python-multipart
 requests
-opencv-python
+opencv-python-headless
+flask
