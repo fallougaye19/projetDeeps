@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}À propos - Détection de Paludisme{% endblock %}
+
+{% block navigation %}
+<nav class="bg-green-600 text-white p-4 shadow-lg" role="navigation">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">🧬 Détection de Paludisme</h1>
+        <div class="flex items-center space-x-4">
+            <span class="text-green-100">Bienvenue, <strong>{{ username }}</strong></span>
+            <div class="flex space-x-2">
+                <a href="{{ url_for('index') }}" 
+                   class="bg-green-500 hover:bg-green-400 px-4 py-2 rounded-lg transition">
+                    Accueil
+                </a>
+                <a href="{{ url_for('evaluation') }}" 
+                   class="bg-green-500 hover:bg-green-400 px-4 py-2 rounded-lg transition">
+                    Évaluation
+                </a>
+                <a href="{{ url_for('auth.logout') }}" 
+                   class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-white shadow-xl rounded-2xl p-8">
+        <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">
+            À propos du projet
+        </h2>
+        
+        <div class="prose max-w-none">
+            <section class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎯 Objectif</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Ce système utilise l'intelligence artificielle pour détecter la présence du parasite 
+                    du paludisme dans des images de cellules sanguines. Notre modèle CNN atteint une 
+                    précision de plus de 95% sur les données de validation.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">🔬 Technologie</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-600 mb-2">Backend</h4>
+                        <ul class="text-gray-600 space-y-1">
+                            <li>• Flask (Python)</li>
+                            <li>• TensorFlow/Keras</li>
+                            <li>• PostgreSQL</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-600 mb-2">Frontend</h4>
+                        <ul class="text-gray-600 space-y-1">
+                            <li>• HTML5/CSS3</li>
+                            <li>• TailwindCSS</li>
+                            <li>• JavaScript</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">📊 Dataset</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Le modèle a été entraîné sur le dataset NIH Malaria comportant 27,558 images 
+                    de cellules sanguines annotées par des experts médicaux.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">⚠️ Avertissement</h3>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <p class="text-gray-700">
+                        <strong>Important:</strong> Ce système est à usage éducatif et de recherche uniquement. 
+                        Il ne remplace pas un diagnostic médical professionnel. Consultez toujours un 
+                        professionnel de santé qualifié pour un diagnostic médical.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">📧 Contact</h3>
+                <p class="text-gray-600">
+                    Pour plus d'informations ou pour signaler un problème, contactez-nous à :
+                    <a href="mailto:contact@malaria-detection.com" 
+                       class="text-green-600 hover:underline">
+                        contact@malaria-detection.com
+                    </a>
+                </p>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

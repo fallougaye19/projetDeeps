@@ -1,0 +1,97 @@
+/* Styles personnalisés supplémentaires */
+
+/* Animations personnalisées */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Accessibilité - Focus visible */
+*:focus-visible {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+}
+
+/* Animation bounce avec délai */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-bounce-delay-150 {
+    animation: bounce 1s infinite 150ms;
+}
+
+.animate-bounce-delay-300 {
+    animation: bounce 1s infinite 300ms;
+}
+
+/* Indicateurs de validation */
+.req-icon {
+    margin-right: 0.5rem;
+    display: inline-block;
+    width: 1rem;
+}
+
+.req-valid .req-icon {
+    color: #10b981;
+}
+
+.req-valid .req-icon::before {
+    content: '✓';
+}
+
+/* Transitions douces */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Style pour les tableaux */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Hover effects */
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* Loading spinner custom */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Style pour les messages d'alerte */
+.alert {
+    animation: fadeIn 0.3s ease-in;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-mobile {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}

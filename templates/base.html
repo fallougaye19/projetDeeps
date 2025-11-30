@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Système de détection du paludisme par analyse d'images de cellules sanguines">
+    <title>{% block title %}Détection de Paludisme{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2e0f6e52c.js" crossorigin="anonymous" defer></script>
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* Animations personnalisées */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        /* Accessibilité - Focus visible */
+        *:focus-visible {
+            outline: 2px solid #10b981;
+            outline-offset: 2px;
+        }
+        
+        /* Animation bounce avec délai */
+        .animate-bounce-delay-150 {
+            animation: bounce 1s infinite 150ms;
+        }
+        .animate-bounce-delay-300 {
+            animation: bounce 1s infinite 300ms;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    
+    {% block navigation %}{% endblock %}
+    
+    <!-- Messages Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mx-auto px-4 mt-4">
+                {% for category, message in messages %}
+                    <div role="alert" 
+                         class="fade-in p-4 rounded-lg mb-4 flex items-center justify-between
+                                {% if category == 'success' %}bg-green-100 text-green-800 border border-green-200
+                                {% elif category == 'danger' or category == 'error' %}bg-red-100 text-red-800 border border-red-200
+                                {% elif category == 'warning' %}bg-yellow-100 text-yellow-800 border border-yellow-200
+                                {% else %}bg-blue-100 text-blue-800 border border-blue-200{% endif %}"
+                         aria-live="polite">
+                        <span>
+                            {% if category == 'success' %}✓{% elif category == 'danger' or category == 'error' %}✗{% elif category == 'warning' %}⚠{% else %}ℹ{% endif %}
+                            {{ message }}
+                        </span>
+                        <button onclick="this.parentElement.remove()" 
+                                class="ml-4 text-2xl leading-none hover:opacity-70 focus:outline-none"
+                                aria-label="Fermer le message">
+                            &times;
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Contenu principal -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 mt-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 - Système de Détection de Paludisme</p>
+            <p class="text-sm mt-2">Flask + TensorFlow + PostgreSQL</p>
+        </div>
+    </footer>
+    
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // Fermeture automatique des messages flash après 5 secondes
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('[role="alert"]');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
