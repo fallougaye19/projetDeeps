@@ -1,21 +1,19 @@
 # Framework Flask
+# Framework Flask
 Flask==3.0.0
 Werkzeug==3.0.1
 
 # Base de données
 psycopg2-binary==2.9.9
 
-# Machine Learning & Data Science
-tensorflow-cpu==2.15.0
-numpy==1.26.4
-pandas==2.1.4
+# Security
+python-dotenv==1.0.0
+Flask-WTF==1.2.1
 
-# Traitement d'images
-opencv-python-headless==4.8.1.78
-Pillow==10.4.0
-
-# Serveur WSGI pour production
+# Production Server
 gunicorn==21.2.0
 
-# Utilitaires
-python-dotenv==1.0.0
+# Development (optionnel)
+# pytest==7.4.3
+# black==23.12.1
+# flake8==6.1.0
