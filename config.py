@@ -22,6 +22,8 @@ class Config:
     
     # PostgreSQL - Gestion production vs développement
     DATABASE_URL = os.getenv('DATABASE_URL')  # URL complète fournie par Render
+    if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     
     # Paramètres individuels (fallback pour développement local)
     DB_HOST = os.getenv('DB_HOST', 'localhost')
