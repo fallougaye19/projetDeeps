@@ -20,7 +20,10 @@ class Config:
     MODEL_PATH = os.getenv('MODEL_PATH', 'models/best_overall_model.h5')
     IMG_SIZE = int(os.getenv('IMG_SIZE', 128))
     
-    # PostgreSQL
+    # PostgreSQL - Gestion production vs développement
+    DATABASE_URL = os.getenv('DATABASE_URL')  # URL complète fournie par Render
+    
+    # Paramètres individuels (fallback pour développement local)
     DB_HOST = os.getenv('DB_HOST', 'localhost')
     DB_PORT = os.getenv('DB_PORT', '5432')
     DB_NAME = os.getenv('DB_NAME', 'malaria_detection')
@@ -29,7 +32,13 @@ class Config:
     
     @property
     def SQLALCHEMY_DATABASE_URI(self):
-        return f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        """Retourne l'URI de connexion appropriée"""
+        if self.DATABASE_URL:
+            # En production (Render), utiliser DATABASE_URL
+            return self.DATABASE_URL
+        else:
+            # En développement, construire l'URI à partir des paramètres
+            return f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

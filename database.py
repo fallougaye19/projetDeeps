@@ -6,18 +6,34 @@ from config import config
 
 class Database:
     def __init__(self):
-        self.conn_params = {
-            'host': config.DB_HOST,
-            'port': config.DB_PORT,
-            'database': config.DB_NAME,
-            'user': config.DB_USER,
-            'password': config.DB_PASSWORD
-        }
+        # Utiliser DATABASE_URL si disponible (production Render)
+        # Sinon utiliser les paramètres individuels (développement local)
+        self.use_database_url = config.DATABASE_URL is not None
+        
+        if self.use_database_url:
+            self.database_url = config.DATABASE_URL
+        else:
+            self.conn_params = {
+                'host': config.DB_HOST,
+                'port': config.DB_PORT,
+                'database': config.DB_NAME,
+                'user': config.DB_USER,
+                'password': config.DB_PASSWORD
+            }
     
     def get_connection(self):
         """Établit une connexion à la base de données"""
         try:
-            conn = psycopg2.connect(**self.conn_params)
+            if self.use_database_url:
+                # Connexion via DATABASE_URL (production)
+                conn = psycopg2.connect(
+                    self.database_url,
+                    sslmode='require'  # Requis pour Render
+                )
+            else:
+                # Connexion via paramètres individuels (développement)
+                conn = psycopg2.connect(**self.conn_params)
+            
             return conn
         except Exception as e:
             print(f"Erreur de connexion à la base de données: {e}")
@@ -27,6 +43,7 @@ class Database:
         """Initialise la base de données avec les tables nécessaires"""
         conn = self.get_connection()
         if not conn:
+            print("❌ Impossible de se connecter à la base de données")
             return False
         
         try:
@@ -60,7 +77,7 @@ class Database:
             return True
             
         except Exception as e:
-            print(f"Erreur lors de l'initialisation de la base de données: {e}")
+            print(f"❌ Erreur lors de l'initialisation de la base de données: {e}")
             conn.rollback()
             return False
         finally:

@@ -43,10 +43,22 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Charger le modèle au démarrage
 try:
-    model = load_model(config.MODEL_PATH)
-    print(f"✓ Modèle chargé depuis: {config.MODEL_PATH}")
+    if os.path.exists(config.MODEL_PATH):
+        model = load_model(config.MODEL_PATH, compile=False)
+        # Recompiler pour éviter l'erreur batch_shape
+        model.compile(
+            optimizer='adam',
+            loss='binary_crossentropy',
+            metrics=['accuracy']
+        )
+        print(f"✓ Modèle chargé depuis: {config.MODEL_PATH}")
+    else:
+        print(f"⚠ Fichier modèle introuvable: {config.MODEL_PATH}")
+        print("⚠ L'application fonctionnera sans le modèle")
+        model = None
 except Exception as e:
     print(f"⚠ Erreur lors du chargement du modèle: {e}")
+    print("⚠ L'application continuera sans le modèle")
     model = None
 
 # Configuration
