@@ -17,7 +17,7 @@ class Config:
     ALLOWED_EXTENSIONS = set(os.getenv('ALLOWED_EXTENSIONS', 'png,jpg,jpeg').split(','))
     
     # Model
-    MODEL_PATH = os.getenv('MODEL_PATH', 'models/best_overall_model.h5')
+    MODEL_PATH = os.getenv('MODEL_PATH', 'models/best_overall_model.keras')
     IMG_SIZE = int(os.getenv('IMG_SIZE', 128))
     
     # PostgreSQL - Gestion production vs développement
